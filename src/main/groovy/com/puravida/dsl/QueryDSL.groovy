@@ -130,6 +130,18 @@ class QueryDSL implements Cloneable{
         writer.toString()
     }
 
+    public String getListSQL( ){
+        StringWriter writer = new StringWriter()
+        writer.write("SELECT $fields")
+        writer.write("\nFROM \n$fromTables")
+        if( whereStr && whereStr.length())
+            writer.write("\n$whereStr")
+        if( trace ){
+            println( writer.toString() )
+        }
+        writer.toString()
+    }
+
     public String getCountSQL( ){
         StringWriter writer = new StringWriter()
         writer.write("SELECT count(*)")
@@ -144,11 +156,11 @@ class QueryDSL implements Cloneable{
         writer.toString()
     }
 
-    public QueryDSL namedSQL(closure){
+    public String namedSQL(closure){
         QueryDSL clone = this.clone()
         closure.delegate = clone
         closure()
-        clone
+        clone.SQL
     }
 
 
